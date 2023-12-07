@@ -29,4 +29,4 @@ This project is ongoing, a journey in the making!
 
 ### Documentation
 
-For detailed information on how to use the API, explore available endpoints, and integrate OpenMovies into your projects, check out the [documentation](Documentation/docs/index.md).
+For detailed information on how to use the API, explore available endpoints, and integrate OpenMovies into your projects, check out the [documentation](https://https-richardy.github.io/openmovies-docs/).
