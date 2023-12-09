@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenMovies.DTOs;
 using OpenMovies.Models;
@@ -29,6 +30,7 @@ public class MovieController : ControllerBase
         _hostEnvironment = hostEnvironment;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
@@ -45,6 +47,7 @@ public class MovieController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -59,6 +62,7 @@ public class MovieController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "admin")]
     [HttpPost]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Create([FromForm, FromBody] MovieDTO data)
@@ -104,6 +108,7 @@ public class MovieController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromForm] MovieDTO data)
     {
@@ -155,6 +160,7 @@ public class MovieController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -169,6 +175,7 @@ public class MovieController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpGet("search")]
     public async Task<IActionResult> Search(
         [FromQuery] string? name = null,
