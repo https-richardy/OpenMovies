@@ -1,4 +1,5 @@
 global using System.Text;
+global using System.Linq.Expressions;
 
 global using Xunit;
 global using Moq;
