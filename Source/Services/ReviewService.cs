@@ -42,6 +42,9 @@ public class ReviewService : IReviewService
     public async Task<IEnumerable<Review>> GetReviewsByMovieAsync(int movieId)
     {
         var reviews = await _reviewRepository.GetReviewsByMovieAsync(movieId);
+        if (reviews == null)
+            throw new InvalidOperationException("Movie not found.");
+
         return reviews;
     }
 
