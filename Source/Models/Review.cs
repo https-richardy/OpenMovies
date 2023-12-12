@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace OpenMovies.Models;
 
-public class Review
+public class Review : Entity
 {
     public bool Liked { get; set; }
     public string Comment { get; set; } = string.Empty;
