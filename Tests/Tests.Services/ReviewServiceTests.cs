@@ -4,6 +4,7 @@ public class ReviewServiceTests
 {
     private readonly Fixture _fixture;
     private readonly Mock<IReviewRepository> _reviewRepositoryMock;
+    private Mock<IValidator<Review>> _validator;
     private readonly ReviewService _reviewService;
 
     public ReviewServiceTests()
@@ -12,16 +13,33 @@ public class ReviewServiceTests
         _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 
         _reviewRepositoryMock = new Mock<IReviewRepository>();
-        _reviewService = new ReviewService(_reviewRepositoryMock.Object);
+        _validator = new Mock<IValidator<Review>>();
+
+        _reviewService = new ReviewService(_reviewRepositoryMock.Object, _validator.Object);
     }
 
     [Fact]
     public async Task AddReviewAsync_ValidReview_ShouldAddReview()
     {
         var validReview = _fixture.Create<Review>();
+        _validator.Setup(validator => validator.Validate(validReview))
+            .Returns(new ValidationResult());
+
         await _reviewService.AddReviewAsync(validReview);
 
         _reviewRepositoryMock.Verify(repo => repo.AddAsync(validReview), Times.Once);
+    }
+
+    [Fact]
+    public async Task AddReviewAsync_InvalidReview_ShouldThrowValidationException()
+    {
+        var invalidReview = _fixture.Create<Review>();
+        _validator.Setup(validator => validator.Validate(invalidReview))
+            .Returns(new ValidationResult(new List<ValidationFailure> { new ValidationFailure("PropertyName", "Error Message") }));
+
+        await Assert.ThrowsAsync<ValidationException>(() => _reviewService.AddReviewAsync(invalidReview));
+
+        _reviewRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Review>()), Times.Never);
     }
 
     [Fact]
@@ -85,7 +103,7 @@ public class ReviewServiceTests
         _reviewRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Review, bool>>>()))
                             .ReturnsAsync((Review)null);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _reviewService.GetReviewAsync(r => r.Id == 1)); // Supondo que 1 seja um ID que não existe
+        await Assert.ThrowsAsync<InvalidOperationException>(() => _reviewService.GetReviewAsync(r => r.Id == 1));
     }
 
     [Fact]
@@ -114,8 +132,11 @@ public class ReviewServiceTests
     public async Task UpdateReviewAsync_ExistingReview_ShouldUpdateReview()
     {
         var existingReview = _fixture.Create<Review>();
+
         _reviewRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Review, bool>>>()))
                             .ReturnsAsync(existingReview);
+        _validator.Setup(validator => validator.Validate(existingReview))
+            .Returns(new ValidationResult());
 
         await _reviewService.UpdateReviewAsync(existingReview);
         _reviewRepositoryMock.Verify(repo => repo.UpdateAsync(existingReview), Times.Once);
@@ -137,5 +158,20 @@ public class ReviewServiceTests
                             .ReturnsAsync((Review)null);
 
         await Assert.ThrowsAsync<InvalidOperationException>(() => _reviewService.UpdateReviewAsync(nonExistingReview));
+    }
+
+    [Fact]
+    public async Task UpdateReviewAsync_InvalidReview_ShouldThrowValidationException()
+    {
+        var existingReview = _fixture.Create<Review>();
+
+        _reviewRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Review, bool>>>()))
+                            .ReturnsAsync(existingReview);
+
+        _validator.Setup(validator => validator.Validate(existingReview))
+            .Returns(new ValidationResult(new List<ValidationFailure> { new ValidationFailure("PropertyName", "Error Message") }));
+
+        await Assert.ThrowsAsync<ValidationException>(() => _reviewService.UpdateReviewAsync(existingReview));
+        _reviewRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<Review>()), Times.Never);
     }
 }
