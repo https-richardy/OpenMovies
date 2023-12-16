@@ -64,4 +64,53 @@ public class ReviewController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+
+    [Authorize]
+    [HttpDelete("{reviewId}")]
+    public async Task<IActionResult> Delete(int reviewId)
+    {
+        try
+        {
+            var user = await _userService.GetUserAsync(User);
+            var existingReview = await _reviewService.GetReviewAsync(r => r.Id == reviewId);
+
+            if (existingReview.User.Id != user.Id)
+                return Forbid();
+
+            await _reviewService.DeleteReviewAsync(existingReview);
+
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
+
+    [Authorize]
+    [HttpPut("{reviewId}")]
+    public async Task<IActionResult> Update(int reviewId, [FromBody] ReviewDTO data)
+    {
+        try
+        {
+            var user = await _userService.GetUserAsync(User);
+            var existingReview = await _reviewService.GetReviewAsync(r => r.Id == reviewId);
+
+            if (existingReview.User.Id != user.Id)
+                return Forbid();
+
+            var review = new Review(data.Liked, data.Comment, existingReview.Movie, user, data.Classification, data.ContainsSpoiler);
+            await _reviewService.UpdateReviewAsync(review);
+
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 }
