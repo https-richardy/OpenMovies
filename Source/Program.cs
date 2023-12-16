@@ -5,6 +5,9 @@ using OpenMovies.Data;
 using OpenMovies.Repositories;
 using OpenMovies.Services;
 using OpenMovies.Extensions;
+using FluentValidation;
+using OpenMovies.Models;
+using OpenMovies.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -40,6 +43,9 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IDirectorService, DirectorService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+builder.Services.AddTransient<IValidator<Review>, ReviewValidator>();
+
 
 var app = builder.Build();
 
