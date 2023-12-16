@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -54,7 +55,11 @@ public class ReviewController : ControllerBase
 
             return StatusCode(201);
         }
-        catch (InvalidOperationException ex)
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (ValidationException ex)
         {
             return BadRequest(new { message = ex.Message });
         }
