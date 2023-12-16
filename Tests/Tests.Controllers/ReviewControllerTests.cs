@@ -103,4 +103,124 @@ public class ReviewControllerTests
 
         Assert.Equal(400, actionResult.StatusCode);
     }
+
+    [Fact]
+    public async Task Delete_WithValidReviewIdAndMatchingUser_ReturnsNoContent()
+    {
+        var reviewId = 1;
+        var user = _fixture.Create<IdentityUser>();
+        var existingReview = _fixture.Build<Review>().With(r => r.User, user).Create();
+
+        _userService.Setup(service => service.GetUserAsync(_controller.User)).ReturnsAsync(user);
+        _reviewService.Setup(service => service.GetReviewAsync(r => r.Id == reviewId)).ReturnsAsync(existingReview);
+
+        var result = await _controller.Delete(reviewId);
+
+        var actionResult = Assert.IsType<NoContentResult>(result);
+        Assert.Equal(204, actionResult.StatusCode);
+
+        _reviewService.Verify(service => service.DeleteReviewAsync(existingReview), Times.Once);
+    }
+
+    [Fact]
+    public async Task Delete_WithValidReviewIdAndMismatchedUser_ReturnsForbid()
+    {
+        var reviewId = 1;
+        var user = _fixture.Create<IdentityUser>();
+        var otherUser = _fixture.Create<IdentityUser>();
+        var existingReview = _fixture.Build<Review>().With(r => r.User, otherUser).Create();
+
+        _userService.Setup(service => service.GetUserAsync(_controller.User)).ReturnsAsync(user);
+        _reviewService.Setup(service => service.GetReviewAsync(r => r.Id == reviewId)).ReturnsAsync(existingReview);
+
+        var result = await _controller.Delete(reviewId);
+
+        Assert.IsType<ForbidResult>(result);
+        _reviewService.Verify(service => service.DeleteReviewAsync(It.IsAny<Review>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task Delete_WithInvalidReviewId_ReturnsNotFound()
+    {
+        var reviewId = -1;
+
+        _reviewService.Setup(service => service.GetReviewAsync(r => r.Id == reviewId))
+            .ThrowsAsync(new InvalidOperationException("Review not found"));
+
+        var result = await _controller.Delete(reviewId);
+
+        var actionResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal(404, actionResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task Update_WithValidReviewIdAndMatchingUser_ReturnsNoContent()
+    {
+        var reviewId = 1;
+        var user = _fixture.Create<IdentityUser>();
+        var existingReview = _fixture.Build<Review>().With(r => r.User, user).Create();
+        var reviewDTO = _fixture.Create<ReviewDTO>();
+
+        _userService.Setup(service => service.GetUserAsync(_controller.User)).ReturnsAsync(user);
+        _reviewService.Setup(service => service.GetReviewAsync(r => r.Id == reviewId)).ReturnsAsync(existingReview);
+
+        var result = await _controller.Update(reviewId, reviewDTO);
+
+        var actionResult = Assert.IsType<NoContentResult>(result);
+        Assert.Equal(204, actionResult.StatusCode);
+
+        _reviewService.Verify(service => service.UpdateReviewAsync(It.IsAny<Review>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task Update_WithValidReviewIdAndMismatchedUser_ReturnsForbid()
+    {
+        var reviewId = 1;
+        var user = _fixture.Create<IdentityUser>();
+        var otherUser = _fixture.Create<IdentityUser>();
+        var existingReview = _fixture.Build<Review>().With(r => r.User, otherUser).Create();
+        var reviewDTO = _fixture.Create<ReviewDTO>();
+
+        _userService.Setup(service => service.GetUserAsync(_controller.User)).ReturnsAsync(user);
+        _reviewService.Setup(service => service.GetReviewAsync(r => r.Id == reviewId)).ReturnsAsync(existingReview);
+
+        var result = await _controller.Update(reviewId, reviewDTO);
+
+        Assert.IsType<ForbidResult>(result);
+        _reviewService.Verify(service => service.UpdateReviewAsync(It.IsAny<Review>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task Update_WithInvalidReviewId_ReturnsNotFound()
+    {
+        var reviewId = -1;
+        var reviewDTO = _fixture.Create<ReviewDTO>();
+
+        _reviewService.Setup(service => service.GetReviewAsync(r => r.Id == reviewId))
+            .ThrowsAsync(new InvalidOperationException("Review not found"));
+
+        var result = await _controller.Update(reviewId, reviewDTO);
+
+        var actionResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal(404, actionResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task Update_WithValidationException_ReturnsBadRequest()
+    {
+        var reviewId = 1;
+        var user = _fixture.Create<IdentityUser>();
+        var existingReview = _fixture.Build<Review>().With(r => r.User, user).Create();
+        var reviewDTO = _fixture.Create<ReviewDTO>();
+
+        _userService.Setup(service => service.GetUserAsync(_controller.User)).ReturnsAsync(user);
+        _reviewService.Setup(service => service.GetReviewAsync(r => r.Id == reviewId)).ReturnsAsync(existingReview);
+        _reviewService.Setup(service => service.UpdateReviewAsync(It.IsAny<Review>()))
+            .Throws(new ValidationException("Validation failed"));
+
+        var result = await _controller.Update(reviewId, reviewDTO);
+
+        var actionResult = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(400, actionResult.StatusCode);
+    }
 }
