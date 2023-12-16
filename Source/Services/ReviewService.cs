@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using FluentValidation;
 using OpenMovies.Models;
 using OpenMovies.Repositories;
 
@@ -7,16 +8,22 @@ namespace OpenMovies.Services;
 public class ReviewService : IReviewService
 {
     private readonly IReviewRepository _reviewRepository;
+    private readonly IValidator<Review> _reviewValidator;
 
-    public ReviewService(IReviewRepository reviewRepository)
+    public ReviewService(IReviewRepository reviewRepository, IValidator<Review> reviewValidator)
     {
         _reviewRepository = reviewRepository;
+        _reviewValidator = reviewValidator;
     }
 
     public async Task AddReviewAsync(Review review)
     {
         if (review == null)
             throw new ArgumentNullException(nameof(review), "Review object cannot be null.");
+
+        var validationResult = _reviewValidator.Validate(review);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
 
         await _reviewRepository.AddAsync(review);
     }
@@ -53,6 +60,10 @@ public class ReviewService : IReviewService
         var existingReview = await _reviewRepository.GetAsync(r => r.Id == review.Id);
         if (existingReview == null)
             throw new InvalidOperationException("Review not found.");
+
+        var validationResult = _reviewValidator.Validate(existingReview);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
 
         await _reviewRepository.UpdateAsync(review);
     }
