@@ -61,6 +61,12 @@ public class ReviewService : IReviewService
         if (existingReview == null)
             throw new InvalidOperationException("Review not found.");
 
+        existingReview.Liked = review.Liked;
+        existingReview.Comment = review.Comment;
+        existingReview.Classification = review.Classification;
+        existingReview.ContainsSpoiler = review.ContainsSpoiler;
+
+
         var validationResult = _reviewValidator.Validate(existingReview);
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
