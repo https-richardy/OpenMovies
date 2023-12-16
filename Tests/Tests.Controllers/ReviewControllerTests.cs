@@ -70,7 +70,7 @@ public class ReviewControllerTests
         _movieService.Setup(service => service.GetMovieById(movieId))
             .ReturnsAsync(movie);
 
-        _userService.Setup(um => um.GetUserAsync(_controller.User))
+        _userService.Setup(service => service.GetUserAsync(_controller.User))
             .ReturnsAsync(user);
 
         var result = await _controller.Create(reviewDTO, movieId);
@@ -80,4 +80,27 @@ public class ReviewControllerTests
         Assert.Equal(201, actionResult.StatusCode);
     }
 
+    [Fact]
+    public async Task Create_WithInvalidData_ValidationException_ReturnsBadRequestResult()
+    {
+        var movieId = 1;
+
+        var reviewDTO = _fixture.Create<ReviewDTO>();
+        var movie = _fixture.Create<Movie>();
+        var user = _fixture.Create<IdentityUser>();
+
+        _movieService.Setup(service => service.GetMovieById(movieId))
+            .ReturnsAsync(movie);
+
+        _userService.Setup(service => service.GetUserAsync(_controller.User))
+            .ReturnsAsync(user);
+
+        _reviewService.Setup(service => service.AddReviewAsync(It.IsAny<Review>()))
+            .Throws(new ValidationException("Validation failed"));
+
+        var result = await _controller.Create(reviewDTO, movieId);
+        var actionResult = Assert.IsType<BadRequestObjectResult>(result);
+
+        Assert.Equal(400, actionResult.StatusCode);
+    }
 }
