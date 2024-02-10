@@ -1,0 +1,6 @@
+@OpenMovies.WebApi_HostAddress = http://localhost:5034
+
+GET {{OpenMovies.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
