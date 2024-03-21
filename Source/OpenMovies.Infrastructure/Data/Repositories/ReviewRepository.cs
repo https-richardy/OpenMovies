@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using OpenMovies.Data;
 using OpenMovies.Models;
 
 namespace OpenMovies.Infrastructure.Data.Repositories;
