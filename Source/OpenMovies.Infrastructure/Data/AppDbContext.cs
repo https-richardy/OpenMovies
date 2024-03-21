@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OpenMovies.Models;
 
-namespace OpenMovies.Data;
+namespace OpenMovies.Infrastructure.Data;
 
 public class AppDbContext : IdentityDbContext
 {
