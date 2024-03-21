@@ -3,7 +3,7 @@ using OpenMovies.Data;
 using OpenMovies.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace OpenMovies.Repositories;
+namespace OpenMovies.Infrastructure.Data.Repositories;
 
 public class MovieRepository : IMovieRepository
 {
