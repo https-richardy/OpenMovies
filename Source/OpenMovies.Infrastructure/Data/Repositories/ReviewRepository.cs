@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OpenMovies.Data;
 using OpenMovies.Models;
 
-namespace OpenMovies.Repositories;
+namespace OpenMovies.Infrastructure.Data.Repositories;
 
 public class ReviewRepository : IReviewRepository
 {
