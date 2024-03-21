@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenMovies", "Source\OpenMo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenMovies.Source.Tests", "Tests\OpenMovies.Source.Tests.csproj", "{31975945-F42F-41F5-81A2-800E303DB928}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{F7A4A25B-88ED-4202-BBE9-89F9DAE94919}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenMovies.Infrastructure", "Source\OpenMovies.Infrastructure\OpenMovies.Infrastructure.csproj", "{FA92B1CF-2638-4B52-A16D-9CBA10FB7C76}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenMovies.Infrastructure.IoC", "Source\OpenMovies.Infrastructure.IoC\OpenMovies.Infrastructure.IoC.csproj", "{B2F6C3AD-58AC-4F7D-A609-7223BA83FF29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +30,17 @@ Global
 		{31975945-F42F-41F5-81A2-800E303DB928}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31975945-F42F-41F5-81A2-800E303DB928}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31975945-F42F-41F5-81A2-800E303DB928}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA92B1CF-2638-4B52-A16D-9CBA10FB7C76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA92B1CF-2638-4B52-A16D-9CBA10FB7C76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA92B1CF-2638-4B52-A16D-9CBA10FB7C76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA92B1CF-2638-4B52-A16D-9CBA10FB7C76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2F6C3AD-58AC-4F7D-A609-7223BA83FF29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2F6C3AD-58AC-4F7D-A609-7223BA83FF29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2F6C3AD-58AC-4F7D-A609-7223BA83FF29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2F6C3AD-58AC-4F7D-A609-7223BA83FF29}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FA92B1CF-2638-4B52-A16D-9CBA10FB7C76} = {F7A4A25B-88ED-4202-BBE9-89F9DAE94919}
+		{B2F6C3AD-58AC-4F7D-A609-7223BA83FF29} = {F7A4A25B-88ED-4202-BBE9-89F9DAE94919}
 	EndGlobalSection
 EndGlobal
