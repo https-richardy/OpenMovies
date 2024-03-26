@@ -1,12 +1,9 @@
 using System.Text.Json.Serialization;
-using OpenMovies.Models.Enums;
 
 namespace OpenMovies.Domain.Enitites;
 
 public class Trailer : Entity
 {
-    public TrailerType Type { get; set; }
-    public TrailerPlataform Plataform { get; set; }
 
     [JsonIgnore]
     public Movie Movie { get; set; }
@@ -15,10 +12,8 @@ public class Trailer : Entity
     #pragma warning disable CS8618
     public Trailer() {  }  // Empty constructor for Entity Framework
 
-    public Trailer(TrailerType type, TrailerPlataform plataform, string link, Movie movie)
+    public Trailer(string link, Movie movie)
     {
-        Type = type;
-        Plataform = plataform;
         Link = link;
         Movie = movie;
     }
