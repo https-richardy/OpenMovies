@@ -1,4 +1,4 @@
-namespace OpenMovies.Models;
+namespace OpenMovies.Domain.Enitites;
 
 public class Category : Entity
 {
