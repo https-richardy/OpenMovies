@@ -20,7 +20,9 @@ public class Trailer : Entity
 
     public string GenerateEmbeddedLink()
     {
-        string videoId = Link.Split("v=")[1];
-        return $"https://www.youtube.com/embed/{videoId}";
+        string videoIdentifier = Link.Split("v=")[1];
+        string embeddedLink = $"https://www.youtube.com/embed/{videoIdentifier}";
+
+        return embeddedLink;
     }
 }
