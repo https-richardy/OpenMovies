@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using OpenMovies.Models.Enums;
 
-namespace OpenMovies.Models;
+namespace OpenMovies.Domain.Enitites;
 
 public class Trailer : Entity
 {
