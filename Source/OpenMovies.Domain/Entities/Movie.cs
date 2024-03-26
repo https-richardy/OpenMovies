@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace OpenMovies.Models;
+namespace OpenMovies.Domain.Enitites;
 
 
 public class Movie : Entity
