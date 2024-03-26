@@ -1,4 +1,4 @@
-namespace OpenMovies.Models;
+namespace OpenMovies.Domain.Enitites;
 
 /// <summary>
 /// Abstract base class for entities/models.
