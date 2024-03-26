@@ -20,6 +20,7 @@ public class Trailer : Entity
 
     private string GenerateEmbeddedLink(string link)
     {
+        // Extracting the video identifier. The video identifier is after the "v=" parameter
         string videoIdentifier = link.Split("v=")[1];
         string embeddedLink = $"https://www.youtube.com/embed/{videoIdentifier}";
 
