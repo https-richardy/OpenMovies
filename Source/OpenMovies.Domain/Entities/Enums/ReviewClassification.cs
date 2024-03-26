@@ -1,4 +1,4 @@
-namespace OpenMovies.Models;
+namespace OpenMovies.Domain.Enitites.Enums;
 
 
 public enum ReviewClassification
