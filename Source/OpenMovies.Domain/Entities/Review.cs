@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 
-namespace OpenMovies.Models;
+namespace OpenMovies.Domain.Enitites;
 
 public class Review : Entity
 {
