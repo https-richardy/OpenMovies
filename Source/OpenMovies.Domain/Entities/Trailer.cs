@@ -14,13 +14,13 @@ public class Trailer : Entity
 
     public Trailer(string link, Movie movie)
     {
-        Link = link;
+        Link = GenerateEmbeddedLink(link);
         Movie = movie;
     }
 
-    public string GenerateEmbeddedLink()
+    private string GenerateEmbeddedLink(string link)
     {
-        string videoIdentifier = Link.Split("v=")[1];
+        string videoIdentifier = link.Split("v=")[1];
         string embeddedLink = $"https://www.youtube.com/embed/{videoIdentifier}";
 
         return embeddedLink;
