@@ -20,19 +20,7 @@ public class Trailer : Entity
 
     public string GenerateEmbeddedLink()
     {
-        switch (Plataform)
-        {
-            case TrailerPlataform.Youtube:
-
-            string videoId = Link.Split("v=")[1];
-            return $"https://www.youtube.com/embed/{videoId}";
-
-            case TrailerPlataform.Vimeo:
-
-            string vimeoId = Link.Split("/")[3];
-            return $"https://player.vimeo.com/video/{vimeoId}";
-
-            default: return Link;
-        }
+        string videoId = Link.Split("v=")[1];
+        return $"https://www.youtube.com/embed/{videoId}";
     }
 }
